@@ -40,5 +40,7 @@ public class main {
         notificacion.enviarMensaje("Tu pedido fue enviado");
 
         logger.registerLog("Sistema finalizado");
+        
+        System.out.println("");
     }
 }
