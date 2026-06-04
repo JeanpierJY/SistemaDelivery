@@ -1,14 +1,14 @@
 package app;
 
-import config.ConfiguracionGlobal;
-import config.LoggerSistema;
-import config.SeguridadSistema;
-import database.ConexionBD;
+import config_Singleton.ConfiguracionGlobal;
+import config_Singleton.LoggerSistema;
+import config_Singleton.SeguridadSistema;
+import config_Singleton.ConexionBD;
 
-import factory.FactoryEntrega;
-import modelo.entrega.ITipoEntrega;
-import factory.FactoryNotificacion;
-import modelo.notificacion.IMedioNotificacion;
+import Pruebafactory.FactoryEntrega;
+import Pruebamodelo.entrega.ITipoEntrega;
+import Pruebafactory.FactoryNotificacion;
+import Pruebamodelo.notificacion.IMedioNotificacion;
 
 public class main {
     public static void main(String[] args) {
