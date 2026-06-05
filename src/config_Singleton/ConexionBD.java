@@ -27,10 +27,8 @@ public class ConexionBD {
             System.out.println("Conexion exitosa a PostgreSQL");
         } catch (ClassNotFoundException e) {
             System.out.println("Error: No se encontro el Driver de PostgreSQL");
-            e.printStackTrace();
         } catch (SQLException e) {
             System.out.println("Error: No se pudo conectar a la base de datos");
-            e.printStackTrace();
         }
     }
     

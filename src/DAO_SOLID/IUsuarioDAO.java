@@ -3,11 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO_SOLID;
-
-/**
- *
- * @author Jean
- */
-public class IUsuarioDAO {
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
+public interface IUsuarioDAO {
+    String verificarUsuarioEnBD(String email);
     
 }

@@ -1,15 +1,19 @@
 package app;
 
-import config_Singleton.ConfiguracionGlobal;
-import config_Singleton.LoggerSistema;
-import config_Singleton.SeguridadSistema;
-import config_Singleton.ConexionBD;
+import config.ConfiguracionGlobal;
+import config.LoggerSistema;
+import config.SeguridadSistema;
+import database.ConexionBD;
 
-import Pruebafactory.FactoryEntrega;
-import Pruebamodelo.entrega.ITipoEntrega;
-import Pruebafactory.FactoryNotificacion;
-import Pruebamodelo.notificacion.IMedioNotificacion;
+import factory.FactoryEntrega;
+import modelo.entrega.ITipoEntrega;
+import factory.FactoryNotificacion;
+import modelo.notificacion.IMedioNotificacion;
 
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
 public class main {
     public static void main(String[] args) {
         
@@ -44,3 +48,4 @@ public class main {
         System.out.println("ESTE ES PARA GITHUB");
     }
 }
+

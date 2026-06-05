@@ -4,10 +4,14 @@
  */
 package logicaNotificaciones_Factory;
 
-/**
- *
- * @author Jean
- */
-public class Whatsapp {
-    
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
+public class Whatsapp implements Notificacion {
+  
+    @Override
+    public void enviarMensaje(String mensaje) {
+        System.out.println("Enviando mensaje: " + mensaje);
+    }
 }

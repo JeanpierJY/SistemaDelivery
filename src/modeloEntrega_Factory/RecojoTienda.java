@@ -2,16 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package logicaNotificaciones_Factory;
+package modeloEntrega_Factory;
 
 /*
 SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
-public class SMS implements Notificacion {
-    
+public class RecojoTienda implements TipoEntrega {
+
     @Override
-    public void enviarMensaje(String mensaje) {
-        System.out.println("Enviando EMAIL" + mensaje);
+    public void tipoEntrega() {
+        System.out.println("Recojo en tienda");
     }
+
+    @Override
+    public double getCosto() {
+        return 0;
+    }
+    
 }

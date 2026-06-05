@@ -4,10 +4,10 @@
  */
 package DAO_SOLID;
 
-/**
- *
- * @author Jean
- */
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
 public class PedidoDAOPostgres {
     
 }

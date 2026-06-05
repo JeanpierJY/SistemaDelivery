@@ -4,10 +4,14 @@
  */
 package logicaNotificaciones_Factory;
 
-/**
- *
- * @author Jean
- */
-public class Email {
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
+public class Email implements Notificacion {
     
+    @Override
+    public void enviarMensaje(String mensaje) {
+        System.out.println("Enviando email: " + mensaje);
+    }
 }

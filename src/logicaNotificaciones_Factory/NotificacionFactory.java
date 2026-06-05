@@ -4,10 +4,24 @@
  */
 package logicaNotificaciones_Factory;
 
-/**
- *
- * @author Jean
- */
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
 public class NotificacionFactory {
     
+    public static Notificacion crearNotificacion(String tipo) {
+
+        switch(tipo.toUpperCase()) {
+            case "SMS":
+                return new SMS();
+            case "EMAIL":
+                return new Email();
+            case "WHATSAPP":
+                return new Whatsapp();
+
+            default:
+                throw new IllegalArgumentException("Tipo inválido");
+        }
+    }
 }

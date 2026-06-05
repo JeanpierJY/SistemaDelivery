@@ -4,10 +4,11 @@
  */
 package logicaNotificaciones_Factory;
 
-/**
- *
- * @author Jean
- */
-public class Notificacion {
+/*
+SANCHEZ MAMANI, JEANPIERRE
+ALARCON BARDALES, GIANELLA SOPHIA
+*/
+public interface Notificacion {
     
+    void enviarMensaje(String mensaje);
 }

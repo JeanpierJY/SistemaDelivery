@@ -1,4 +1,5 @@
-package PruebaDecorator;
+package logicaDescuentos_Decorator;
+
 
 /*
 SANCHEZ MAMANI, JEANPIERRE
@@ -7,7 +8,7 @@ ALARCON BARDALES, GIANELLA SOPHIA
 
 public class DescuentoEstudiante extends DescuentoDecorator {
 
-    public DescuentoEstudiante(Compra compra) {
+    public DescuentoEstudiante(CompraBase compra) {
         super(compra);
     }
 
