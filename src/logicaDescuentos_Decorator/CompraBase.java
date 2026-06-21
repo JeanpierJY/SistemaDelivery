@@ -8,8 +8,6 @@ ALARCON BARDALES, GIANELLA SOPHIA
 */
 
 public interface CompraBase {
-    
     String getDescripcion();
-    
     double getTotal();
 }

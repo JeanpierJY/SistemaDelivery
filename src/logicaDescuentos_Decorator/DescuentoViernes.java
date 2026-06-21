@@ -7,7 +7,6 @@ ALARCON BARDALES, GIANELLA SOPHIA
 */
 
 public class DescuentoViernes extends DescuentoDecorator {
-
     public DescuentoViernes(CompraBase compra) {
         super(compra);
     }

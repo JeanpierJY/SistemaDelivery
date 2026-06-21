@@ -7,7 +7,6 @@ ALARCON BARDALES, GIANELLA SOPHIA
 */
 
 public class DescuentoEstudiante extends DescuentoDecorator {
-
     public DescuentoEstudiante(CompraBase compra) {
         super(compra);
     }

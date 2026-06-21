@@ -9,6 +9,5 @@ SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
 public interface Notificacion {
-    
     void enviarMensaje(String mensaje);
 }

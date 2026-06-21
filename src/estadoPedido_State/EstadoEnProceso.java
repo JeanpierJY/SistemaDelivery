@@ -12,7 +12,6 @@ import modelos.Pedido;
 public class EstadoEnProceso implements EstadoPedido {
     @Override
     public void siguienteEstado(Pedido pedido) {
-        // CORRECCIÓN: Ahora avanza correctamente a "En Curso"
         pedido.setEstadoLogico(new EstadoEnCurso(), "EN CURSO");
     }
 

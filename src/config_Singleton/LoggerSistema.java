@@ -1,15 +1,14 @@
 package config_Singleton;
 
+import java.time.LocalDateTime;
+
 /*
 SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
 
-import java.time.LocalDateTime;
-
 public class LoggerSistema {
     private static LoggerSistema instancia;
-
     private LoggerSistema() {}
 
     public static LoggerSistema getInstancia() {

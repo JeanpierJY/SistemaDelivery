@@ -4,10 +4,12 @@
  */
 package logicaSeguimiento_Observer;
 
+import modelos.Pedido;
+
 /**
  *
  * @author Jean
  */
-public class IObservador {
-    
+public interface IObservador {
+    public void actualizar(Pedido pedido);
 }
