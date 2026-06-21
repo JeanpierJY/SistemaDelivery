@@ -11,38 +11,31 @@ ALARCON BARDALES, GIANELLA SOPHIA
 */
 
 public class SeguridadSistema {
-
     private static SeguridadSistema instancia;
     private Map<String, List<String>> permisos;
+    
     private SeguridadSistema() {
-
         permisos = new HashMap<>();
+        
+        permisos.put("ADMIN", Arrays.asList(
+            "GESTIONAR_CATALOGO",
+            "GESTIONAR_USUARIOS",
+            "VER_REPORTES"
+        ));
+        
+        permisos.put("REPARTIDOR", Arrays.asList(
+            "VER_PEDIDOS_PENDIENTES",
+            "ACTUALIZAR_ESTADO_PEDIDO"
+        ));
 
-        permisos.put("ADMIN",
-                Arrays.asList(
-                        "CREAR_PEDIDO",
-                        "CANCELAR_PEDIDO",
-                        "GESTIONAR_USUARIOS",
-                        "VER_REPORTES"
-                ));
-
-        permisos.put("CLIENTE",
-                Arrays.asList(
-                        "CREAR_PEDIDO",
-                        "VER_PEDIDO",
-                        "CANCELAR_PEDIDO",
-                        "VER_RUTA"
-                ));
-
-        permisos.put("REPARTIDOR",
-                Arrays.asList(
-                        "VER_RUTA",
-                        "ACTUALIZAR_ENTREGA"
-                ));
+        permisos.put("CLIENTE", Arrays.asList(
+            "VER_CATALOGO",
+            "CREAR_PEDIDO",
+            "VER_HISTORIAL_COMPRAS"
+        ));
     }
 
     public static SeguridadSistema getInstancia() {
-
         if (instancia == null) {
             instancia = new SeguridadSistema();
         }
@@ -50,7 +43,6 @@ public class SeguridadSistema {
     }
 
     public boolean tienePermiso(String rol, String permiso) {
-
         List<String> listaPermisos = permisos.get(rol);
 
         if (listaPermisos == null) {

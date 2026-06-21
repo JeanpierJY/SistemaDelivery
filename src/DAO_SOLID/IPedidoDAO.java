@@ -4,10 +4,16 @@
  */
 package DAO_SOLID;
 
+import java.util.List;
+import modelos.Pedido;
+
 /*
 SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
-public class IPedidoDAO {
-    
+public interface IPedidoDAO {
+    boolean registrarPedido(Pedido pedido);
+    List<Pedido> obtenerPedidosPorEstado(String estado);
+    boolean actualizarEstadoPedido(int idPedido, String nuevoEstado);
+    boolean asignarRepartidor(int idPedido, int idRepartidor);
 }

@@ -4,10 +4,16 @@
  */
 package DAO_SOLID;
 
+import java.util.List;
+import modelos.Producto;
+
 /*
 SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
-public class IProductoDAO {
-    
+public interface IProductoDAO {
+    List<Producto> obtenerCatalogo();
+    boolean registrarProducto(Producto producto);
+    boolean actualizarProducto(Producto producto);
+    boolean eliminarProducto(int idProducto);
 }

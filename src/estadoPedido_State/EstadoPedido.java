@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package modelos_GRASP;
-
+package estadoPedido_State;
+import modelos.Pedido;
 /**
  *
  * @author Jean
  */
-public class DetallePedido {
-    
+public interface EstadoPedido {
+    void siguienteEstado(Pedido pedido);
+    void mostrarEstado();
 }

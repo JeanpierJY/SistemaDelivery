@@ -10,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionBD {
-    
     //Aqui se aplica Singleton
     private static ConexionBD instancia;
     private Connection conexion;
