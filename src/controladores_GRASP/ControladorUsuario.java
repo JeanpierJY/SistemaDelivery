@@ -17,8 +17,7 @@ public class ControladorUsuario {
 
     public boolean registrarNuevoRepartidor(Repartidor nuevo, String password) {
         LoggerSistema.getInstancia().registerLog("Validando datos en RENIEC y MTC...");
-
-        // Aplicamos Early Return: Si algo falla, detenemos el proceso
+        
         String datosDni = validadorAPI.consultarNombrePorDNI(nuevo.getDni());
         if (datosDni == null) {
             LoggerSistema.getInstancia().error("DNI no existe.");
@@ -36,8 +35,7 @@ public class ControladorUsuario {
             LoggerSistema.getInstancia().error("Sin SOAT vigente.");
             return false; 
         }
-
-        // Si todo esta en regla, recien mandamos al DAO
+        
         return usuarioDAO.registrarUsuario(nuevo, password);
     }
 }

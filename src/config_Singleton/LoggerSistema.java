@@ -25,4 +25,11 @@ public class LoggerSistema {
     public void error(String mensaje) {
         System.out.println("[ERROR] " + mensaje);
     }
+    
+    public boolean reportarIncidencia(int idPedido, String descripcion, String nombreRepartidor) {
+        String mensajeLog = "INCIDENCIA [Pedido " + idPedido + "] - Repartidor: " + nombreRepartidor + " - Detalle: " + descripcion;
+                            
+        config_Singleton.LoggerSistema.getInstancia().registerLog(mensajeLog);
+        return true;
+    }
 }
