@@ -9,7 +9,6 @@ SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
 public class PedidoBase implements CompraBase {
-    
     private double totalSinDescuento;
 
     public PedidoBase(double totalSinDescuento) {

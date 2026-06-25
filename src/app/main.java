@@ -1,234 +1,150 @@
 package app;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-import config_Singleton.ConfiguracionGlobal;
-import config_Singleton.LoggerSistema;
-
-import modeloEntrega_Factory.EntregaFactory;
-import modeloEntrega_Factory.TipoEntrega;
-import logicaNotificaciones_Factory.NotificacionFactory;
-import logicaNotificaciones_Factory.Notificacion;
-import logicaDescuentos_Decorator.CompraBase;
-import logicaDescuentos_Decorator.PedidoBase;
-import logicaDescuentos_Decorator.DescuentoCumpleaños;
-import logicaDescuentos_Decorator.DescuentoEstudiante;
-import logicaDescuentos_Decorator.DescuentoViernes;
-
 import DAO_SOLID.IUsuarioDAO;
 import DAO_SOLID.UsuarioDAOPostgres;
 import DAO_SOLID.IProductoDAO;
 import DAO_SOLID.ProductoDAOPostgres;
 import DAO_SOLID.IPedidoDAO;
 import DAO_SOLID.PedidoDAOPostgres;
-
-import modelos.Persona;
-import modelos.Administrador;
-import modelos.Empleado;
-import modelos.Repartidor;
-import modelos.Cliente;
-import modelos.Producto;
-import modelos.Pedido;
+import controladores_GRASP.ControladorPedido;
+import controladores_GRASP.ControladorUsuario;
+import config_Singleton.LoggerSistema;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import logicaDescuentos_Decorator.CompraBase;
+import logicaDescuentos_Decorator.DescuentoEstudiante;
+import logicaDescuentos_Decorator.DescuentoViernes;
+import logicaDescuentos_Decorator.PedidoBase;
+import modeloEntrega_Factory.EntregaFactory;
+import modeloEntrega_Factory.TipoEntrega;
 import modelos.DetallePedido;
+import modelos.Pedido;
+import modelos.Producto;
+import modelos.Repartidor;
 
-/*
-SANCHEZ MAMANI, JEANPIERRE
-ALARCON BARDALES, GIANELLA SOPHIA
-*/
 public class main {
-    
     private static IUsuarioDAO usuarioDAO = new UsuarioDAOPostgres();
     private static IProductoDAO productoDAO = new ProductoDAOPostgres();
     private static IPedidoDAO pedidoDAO = new PedidoDAOPostgres();
-    private static LoggerSistema logger = LoggerSistema.getInstancia();
+    private static ControladorPedido ctrlPedido = new ControladorPedido();
+    private static ControladorUsuario ctrlUsuario = new ControladorUsuario();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ConfiguracionGlobal config = ConfiguracionGlobal.getInstancia();
+        int opcion = 0;
+
+        System.out.println("=================================================");
+        System.out.println("   SISTEMA DELIVERY - ENTORNO DE INTEGRACION     ");
+        System.out.println("=================================================");
+
+        do {
+            System.out.println("\n--- SELECCION DE ENTORNO ---");
+            System.out.println("1. Modulo Administrador");
+            System.out.println("2. Modulo Cliente");
+            System.out.println("3. Modulo Empleado (Central)");
+            System.out.println("4. Modulo Repartidor");
+            System.out.println("5. Apagar Sistema");
+            System.out.print("Seleccione un modulo: ");
+            
+            try {
+                opcion = Integer.parseInt(scanner.nextLine());
+            } catch (Exception e) {
+                opcion = 0;
+            }
+
+            switch (opcion) {
+                case 1:
+                    menuAdministrador(scanner);
+                    break;
+                case 2:
+                    menuCliente(scanner);
+                    break;
+                case 3:
+                    menuEmpleado(scanner);
+                    break;
+                case 4:
+                    menuRepartidor(scanner);
+                    break;
+            }
+        } while (opcion != 5);
         
-        System.out.println("=================================================");
-        System.out.println(" INICIANDO: " + config.getNombreApp() + " v" + config.getVersion());
-        System.out.println("=================================================");
-
-        System.out.println("\n--- LOGIN ---");
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
-        Persona usuarioActivo = usuarioDAO.loginUsuario(email, password);
-
-        if (usuarioActivo == null) {
-            System.out.println("-> ACCESO DENEGADO.");
-            return;
-        }
-
-        logger.registerLog("Sesion iniciada por: " + usuarioActivo.getNombre() + " (" + usuarioActivo.getRol() + ")");
-        System.out.println("\n-> Bienvenido, " + usuarioActivo.getNombre());
-
-        // ENRUTADOR POLIMORFICO
-        if (usuarioActivo instanceof Administrador) {
-            menuAdministrador((Administrador) usuarioActivo, scanner);
-        } else if (usuarioActivo instanceof Empleado) {
-            menuEmpleado((Empleado) usuarioActivo, scanner);
-        } else if (usuarioActivo instanceof Repartidor) {
-            menuRepartidor((Repartidor) usuarioActivo, scanner);
-        } else if (usuarioActivo instanceof Cliente) {
-            menuCliente((Cliente) usuarioActivo, scanner);
-        }
-
-        System.out.println("Apagando sistema...");
-        logger.registerLog("Sesion finalizada.");
+        System.out.println("Sistema apagado.");
         scanner.close();
     }
 
     // ==========================================================
-    // MENU 1: ADMINISTRADOR (Backoffice)
+    // MENU 1: ADMINISTRADOR
     // ==========================================================
-    private static void menuAdministrador(Administrador admin, Scanner scanner) {
+    private static void menuAdministrador(Scanner scanner) {
+        int idAdmin = 1; // ID simulado del admin semilla
         int opcion = 0;
+        
         do {
-            System.out.println("\n--- MENU ADMINISTRADOR ---");
-            System.out.println("1. Gestionar Catalogo de Productos");
-            System.out.println("2. Gestionar Repartidores");
-            System.out.println("3. Acceder al Modulo Operativo (Menu Empleado)");
-            System.out.println("4. Salir");
+            System.out.println("\n--- PANEL ADMINISTRADOR ---");
+            System.out.println("1. Registrar Repartidor (Prueba de APIs Externas)");
+            System.out.println("2. Inhabilitar Usuario (Prueba Borrado Logico)");
+            System.out.println("3. Salir al Menu Principal");
             System.out.print("Opcion: ");
-            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) { opcion = 0; }
+            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) {}
 
             if (opcion == 1) {
-                System.out.println("\n[ CATALOGO ACTUAL ]");
-                List<Producto> lista = productoDAO.obtenerCatalogo();
-                for (Producto p : lista) {
-                    System.out.println("[" + p.getIdProducto() + "] " + p.getNombre() + " - S/" + p.getPrecio());
-                }
-            } else if (opcion == 2) {
-                System.out.println("\n[ REPARTIDORES REGISTRADOS ]");
-                List<Persona> usuarios = usuarioDAO.obtenerUsuarios();
-                for (Persona u : usuarios) {
-                    // RETO 2 RESUELTO: Filtrado en memoria usando instanceof
-                    if (u instanceof Repartidor) {
-                        Repartidor r = (Repartidor) u;
-                        System.out.println("ID: " + r.getId() + " | Nombre: " + r.getNombre() + " | Placa: " + r.getPlacaMoto());
-                    }
-                }
-            } else if (opcion == 3) {
-                // RETO 1 RESUELTO: Reutilizacion de modulo sin duplicar codigo
-                menuEmpleado(new Empleado(), scanner); 
-            }
-        } while (opcion != 4);
-    }
-
-    // ==========================================================
-    // MENU 2: EMPLEADO (Operaciones y Logistica)
-    // ==========================================================
-    private static void menuEmpleado(Empleado empleado, Scanner scanner) {
-        int opcion = 0;
-        do {
-            System.out.println("\n--- MODULO OPERATIVO ---");
-            System.out.println("1. Ver pedidos pendientes");
-            System.out.println("2. Asignar Repartidor a un pedido");
-            System.out.println("3. Volver");
-            System.out.print("Opcion: ");
-            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) { opcion = 0; }
-
-            if (opcion == 1) {
-                List<Pedido> pendientes = pedidoDAO.obtenerPedidosPorEstado("PENDIENTE");
-                if (pendientes.isEmpty()) {
-                    System.out.println("No hay pedidos pendientes.");
+                System.out.println("\n--- NUEVO REPARTIDOR ---");
+                Repartidor nuevo = new Repartidor();
+                System.out.print("Ingrese DNI real (Para API json.pe): ");
+                nuevo.setDni(scanner.nextLine());
+                System.out.print("Ingrese Placa (Para API json.pe): ");
+                nuevo.setPlacaMoto(scanner.nextLine());
+                System.out.print("Ingrese Email para el sistema: ");
+                nuevo.setEmail(scanner.nextLine());
+                
+                // Datos por defecto para agilizar la prueba
+                nuevo.setNombre("Prueba API");
+                nuevo.setTelefono("999999999");
+                nuevo.setRol("REPARTIDOR");
+                
+                System.out.println("Validando documentos en la red...");
+                // Aqui el controlador evalua el JSON internamente y protege la BD
+                if(ctrlUsuario.registrarNuevoRepartidor(nuevo, "12345")) {
+                    System.out.println("-> EXITO: Repartidor registrado en PostgreSQL.");
+                    LoggerSistema.getInstancia().guardarLogBD(idAdmin, "Registro repartidor DNI: " + nuevo.getDni());
                 } else {
-                    for (Pedido p : pendientes) {
-                        System.out.println("Pedido ID: " + p.getIdPedido() + " | Total: S/" + p.getTotal());
-                    }
+                    System.out.println("-> BLOQUEADO: Las APIs rechazaron el DNI/MTC/SOAT.");
                 }
+                
             } else if (opcion == 2) {
-                // RETO 3 RESUELTO: Algoritmo de asignacion cruzada
-                System.out.print("Ingrese ID del Pedido: ");
-                int idPed = Integer.parseInt(scanner.nextLine());
-                
-                System.out.println("[ Repartidores Disponibles ]");
-                List<Persona> usuarios = usuarioDAO.obtenerUsuarios();
-                for (Persona u : usuarios) {
-                    if (u instanceof Repartidor) {
-                        System.out.println("ID: " + u.getId() + " - " + u.getNombre());
-                    }
-                }
-                
-                System.out.print("Ingrese ID del Repartidor: ");
-                int idRep = Integer.parseInt(scanner.nextLine());
-                
-                if (pedidoDAO.asignarRepartidor(idPed, idRep)) {
-                    System.out.println("-> Asignacion exitosa. El pedido ahora esta EN CURSO.");
+                System.out.print("\nID del usuario a inhabilitar: ");
+                int idEliminar = Integer.parseInt(scanner.nextLine());
+                if(usuarioDAO.eliminarUsuario(idEliminar)){
+                    System.out.println("-> EXITO: Cuenta desactivada (activo = false).");
+                    LoggerSistema.getInstancia().guardarLogBD(idAdmin, "Inhabilito al usuario ID: " + idEliminar);
                 } else {
-                    System.out.println("-> Error en la asignacion.");
+                    System.out.println("-> FALLO: Verifique el ID.");
                 }
             }
         } while (opcion != 3);
     }
 
     // ==========================================================
-    // MENU 3: REPARTIDOR (Motorizado)
+    // MENU 2: CLIENTE
     // ==========================================================
-    private static void menuRepartidor(Repartidor repartidor, Scanner scanner) {
-        int opcion = 0;
-        do {
-            System.out.println("\n--- MENU REPARTIDOR ---");
-            System.out.println("1. Ver mis pedidos asignados (EN CURSO)");
-            System.out.println("2. Marcar pedido como COMPLETADO");
-            System.out.println("3. Reportar incidencia");
-            System.out.println("4. Salir");
-            System.out.print("Opcion: ");
-            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) { opcion = 0; }
-
-            if (opcion == 1) {
-                List<Pedido> enCurso = pedidoDAO.obtenerPedidosPorEstado("EN CURSO");
-                boolean tienePedidos = false;
-                for (Pedido p : enCurso) {
-                    // Solo muestra los que le pertenecen a este repartidor
-                    if (p.getIdRepartidor() != null && p.getIdRepartidor() == repartidor.getId()) {
-                        System.out.println("Pedido ID: " + p.getIdPedido() + " | A cobrar: S/" + p.getTotal());
-                        tienePedidos = true;
-                    }
-                }
-                if (!tienePedidos) System.out.println("No tienes pedidos asignados en curso.");
-                
-            } else if (opcion == 2) {
-                System.out.print("Ingrese ID del Pedido entregado: ");
-                int idPed = Integer.parseInt(scanner.nextLine());
-                if (pedidoDAO.actualizarEstadoPedido(idPed, "COMPLETADO")) {
-                    System.out.println("-> Pedido entregado con exito.");
-                }
-            } else if (opcion == 3) {
-                System.out.print("Describa la incidencia: ");
-                String problema = scanner.nextLine();
-                logger.registerLog("INCIDENCIA (Rep. " + repartidor.getNombre() + "): " + problema);
-                System.out.println("-> Incidencia registrada en el sistema.");
-            }
-        } while (opcion != 4);
-    }
-
-    // ==========================================================
-    // MENU 4: CLIENTE (Compras)
-    // ==========================================================
-    private static void menuCliente(Cliente cliente, Scanner scanner) {
+    private static void menuCliente(Scanner scanner) {
+        int idCliente = 3; // ID simulado del cliente semilla
         CompraBase pedidoActual = null;
         TipoEntrega entregaActual = null;
         List<DetallePedido> carritoBD = new ArrayList<>();
         double subtotalPuro = 0.0;
         int opcion = 0;
-
+        
         do {
-            System.out.println("\n--- MENU CLIENTE ---");
-            System.out.println("1. Mostrar Catalogo y Añadir Plato");
-            System.out.println("2. Aplicar cupon de descuento");
-            System.out.println("3. Elegir tipo de envio");
-            System.out.println("4. Finalizar Compra (Guardar Pedido)");
-            System.out.println("5. Salir");
+            System.out.println("\n--- APP CLIENTE ---");
+            System.out.println("1. Ver Catalogo y Anadir Producto");
+            System.out.println("2. Aplicar cupon (Patron Decorator)");
+            System.out.println("3. Elegir tipo envio (Patron Factory)");
+            System.out.println("4. Pagar (Patron Observer)");
+            System.out.println("5. Salir al Menu Principal");
             System.out.print("Opcion: ");
-            
-            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) { opcion = 0; }
+            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) {}
 
             switch (opcion) {
                 case 1:
@@ -236,7 +152,7 @@ public class main {
                     for (Producto p : catalogo) {
                         System.out.println("[" + p.getIdProducto() + "] " + p.getNombre() + " - S/ " + p.getPrecio());
                     }
-                    System.out.print("\nID del plato: ");
+                    System.out.print("\nID del producto: ");
                     int idProd = Integer.parseInt(scanner.nextLine());
                     System.out.print("Cantidad: ");
                     int cant = Integer.parseInt(scanner.nextLine());
@@ -248,9 +164,8 @@ public class main {
                             dp.setCantidad(cant);
                             dp.setPrecioUnitario(p.getPrecio());
                             carritoBD.add(dp);
-                            
                             subtotalPuro += (p.getPrecio() * cant);
-                            System.out.println("-> Añadido: " + cant + "x " + p.getNombre());
+                            System.out.println("-> Anadido al carrito.");
                             break;
                         }
                     }
@@ -259,54 +174,148 @@ public class main {
                     
                 case 2:
                     if (pedidoActual == null) break;
-                    System.out.println("Descuentos: [1] Cumpleaños [2] Estudiante [3] Viernes");
+                    System.out.println("Cupones: [1] Estudiante (-15%) [2] Viernes (-10%)");
                     String desc = scanner.nextLine();
-                    if (desc.equals("1")) pedidoActual = new DescuentoCumpleaños(pedidoActual);
-                    else if (desc.equals("2")) pedidoActual = new DescuentoEstudiante(pedidoActual);
-                    else if (desc.equals("3")) pedidoActual = new DescuentoViernes(pedidoActual);
-                    System.out.println("-> Descuento aplicado.");
+                    if (desc.equals("1")) pedidoActual = new DescuentoEstudiante(pedidoActual);
+                    else if (desc.equals("2")) pedidoActual = new DescuentoViernes(pedidoActual);
+                    System.out.println("-> Total recalculado.");
                     break;
-
+                    
                 case 3:
-                    System.out.println("Envios: [EXPRESS] [PROGRAMADO] [RECOJO]");
+                    System.out.println("Tipos: EXPRESS, PROGRAMADO, RECOJO EN TIENDA");
                     String tipoEnvio = scanner.nextLine();
                     try {
                         entregaActual = EntregaFactory.crearEntrega(tipoEnvio);
                         entregaActual.tipoEntrega(); 
                     } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
                     break;
-
+                    
                 case 4:
                     if (pedidoActual == null || carritoBD.isEmpty()) {
-                        System.out.println("El carrito esta vacio.");
+                        System.out.println("Carrito vacio.");
                         break;
                     }
                     double costoEnvio = (entregaActual != null) ? entregaActual.getCosto() : 0.0;
                     double totalFinal = pedidoActual.getTotal() + costoEnvio;
                     
-                    System.out.println("\n====== TICKET ======");
-                    System.out.println("Subtotal con descuentos: S/ " + pedidoActual.getTotal());
+                    System.out.println("\n====== BOLETA ======");
+                    System.out.println(pedidoActual.getDescripcion());
+                    System.out.println("Subtotal descontado: S/ " + pedidoActual.getTotal());
                     System.out.println("Costo de envio: S/ " + costoEnvio);
-                    System.out.println("TOTAL FINAL: S/ " + totalFinal);
-                    System.out.print("\n¿Confirmar y pagar? (S/N): ");
+                    System.out.println("TOTAL A PAGAR: S/ " + totalFinal);
+                    System.out.print("¿Confirmar compra? (S/N): ");
                     
                     if (scanner.nextLine().equalsIgnoreCase("S")) {
                         Pedido nuevoPedido = new Pedido();
-                        nuevoPedido.setIdCliente(cliente.getId());
+                        nuevoPedido.setIdCliente(idCliente);
                         nuevoPedido.setEstado("PENDIENTE");
                         nuevoPedido.setCostoEnvio(costoEnvio);
                         nuevoPedido.setTotal(totalFinal);
                         nuevoPedido.setDetalles(carritoBD);
                         
-                        if (pedidoDAO.registrarPedido(nuevoPedido)) {
-                            System.out.println("-> COMPRA EXITOSA.");
+                        // Guardado transaccional y disparo de notificaciones
+                        if (ctrlPedido.guardarYNotificar(nuevoPedido)) {
+                            System.out.println("-> EXITO: Compra registrada.");
+                            LoggerSistema.getInstancia().guardarLogBD(idCliente, "Realizo una compra de S/" + totalFinal);
                             carritoBD.clear();
                             subtotalPuro = 0.0;
                             pedidoActual = null;
+                        } else {
+                            System.out.println("-> FALLO: Revertido por seguridad.");
                         }
                     }
                     break;
             }
         } while (opcion != 5);
+    }
+
+    // ==========================================================
+    // MENU 3: EMPLEADO
+    // ==========================================================
+    private static void menuEmpleado(Scanner scanner) {
+        int idEmpleado = 5; // ID simulado del empleado semilla
+        int opcion = 0;
+        
+        do {
+            System.out.println("\n--- TERMINAL EMPLEADO ---");
+            System.out.println("1. Ver pedidos PENDIENTES");
+            System.out.println("2. Asignar Repartidor");
+            System.out.println("3. Salir al Menu Principal");
+            System.out.print("Opcion: ");
+            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) {}
+
+            if (opcion == 1) {
+                List<Pedido> pendientes = pedidoDAO.obtenerPedidosPorEstado("PENDIENTE");
+                if (pendientes.isEmpty()) System.out.println("Todo limpio.");
+                for (Pedido p : pendientes) {
+                    System.out.println("Pedido ID: " + p.getIdPedido() + " | Fecha: " + p.getFechaRegistro());
+                    p.mostrarEstadoActual(); 
+                }
+            } else if (opcion == 2) {
+                System.out.print("Ingrese ID del Pedido: ");
+                int idPed = Integer.parseInt(scanner.nextLine());
+                System.out.print("Ingrese ID del Repartidor (Ej: 2): ");
+                int idRep = Integer.parseInt(scanner.nextLine());
+                
+                if (pedidoDAO.asignarRepartidor(idPed, idRep)) {
+                    // Transicion de Estado y Notificacion automatica
+                    ctrlPedido.actualizarEstadoYNotificar(idPed, "EN CURSO");
+                    System.out.println("-> EXITO: Pedido en ruta.");
+                    LoggerSistema.getInstancia().guardarLogBD(idEmpleado, "Asigno el pedido " + idPed + " al repartidor " + idRep);
+                } else {
+                    System.out.println("-> FALLO: Verifique IDs.");
+                }
+            }
+        } while (opcion != 3);
+    }
+
+    // ==========================================================
+    // MENU 4: REPARTIDOR
+    // ==========================================================
+    private static void menuRepartidor(Scanner scanner) {
+        int idRepartidor = 2; // ID simulado del repartidor semilla
+        int opcion = 0;
+        
+        do {
+            System.out.println("\n--- APP REPARTIDOR ---");
+            System.out.println("1. Ver mis rutas asignadas (EN CURSO)");
+            System.out.println("2. Reportar incidencia en ruta");
+            System.out.println("3. Marcar pedido como COMPLETADO");
+            System.out.println("4. Salir al Menu Principal");
+            System.out.print("Opcion: ");
+            try { opcion = Integer.parseInt(scanner.nextLine()); } catch (Exception e) {}
+
+            if (opcion == 1) {
+                List<Pedido> enCurso = pedidoDAO.obtenerPedidosPorEstado("EN CURSO");
+                boolean tiene = false;
+                for (Pedido p : enCurso) {
+                    if (p.getIdRepartidor() != null && p.getIdRepartidor() == idRepartidor) {
+                        System.out.println("Pedido ID: " + p.getIdPedido() + " | Cobrar al cliente: S/" + p.getTotal());
+                        tiene = true;
+                    }
+                }
+                if (!tiene) System.out.println("Sin rutas pendientes.");
+                
+            } else if (opcion == 2) {
+                System.out.print("Ingrese ID del pedido con problemas: ");
+                int idPed = Integer.parseInt(scanner.nextLine());
+                System.out.print("Describa el problema: ");
+                String problema = scanner.nextLine();
+                
+                LoggerSistema.getInstancia().guardarLogBD(idRepartidor, "INCIDENCIA [Pedido " + idPed + "]: " + problema);
+                System.out.println("-> EXITO: Central notificada. Incidencia guardada.");
+                
+            } else if (opcion == 3) {
+                System.out.print("Ingrese ID del Pedido entregado: ");
+                int idPed = Integer.parseInt(scanner.nextLine());
+                
+                if (ctrlPedido.actualizarEstadoYNotificar(idPed, "COMPLETADO")) {
+                    System.out.println("-> EXITO: Mision cumplida. Notificacion enviada.");
+                    LoggerSistema.getInstancia().guardarLogBD(idRepartidor, "Entrego el pedido " + idPed);
+                } else {
+                    System.out.println("-> FALLO: Verifique el ID.");
+                }
+            }
+        } while (opcion != 4);
     }
 }

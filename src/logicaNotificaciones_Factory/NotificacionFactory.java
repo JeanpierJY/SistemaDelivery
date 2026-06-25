@@ -9,7 +9,6 @@ SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
 */
 public class NotificacionFactory {
-    
     public static Notificacion crearNotificacion(String tipo) {
 
         switch(tipo.toUpperCase()) {

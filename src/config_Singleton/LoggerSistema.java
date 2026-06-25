@@ -1,7 +1,8 @@
 package config_Singleton;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
-
 /*
 SANCHEZ MAMANI, JEANPIERRE
 ALARCON BARDALES, GIANELLA SOPHIA
@@ -26,10 +27,18 @@ public class LoggerSistema {
         System.out.println("[ERROR] " + mensaje);
     }
     
-    public boolean reportarIncidencia(int idPedido, String descripcion, String nombreRepartidor) {
-        String mensajeLog = "INCIDENCIA [Pedido " + idPedido + "] - Repartidor: " + nombreRepartidor + " - Detalle: " + descripcion;
-                            
-        config_Singleton.LoggerSistema.getInstancia().registerLog(mensajeLog);
-        return true;
+    public boolean guardarLogBD(int idUsuario, String accion) {
+        Connection conexion = ConexionBD.getInstancia().getConexion();
+        String query = "INSERT INTO log_sistema (id_usuario, accion) VALUES (?, ?)";
+        
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setInt(1, idUsuario);
+            ps.setString(2, accion);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("[ERROR LOG] Falla en la persistencia de auditoria: " + e.getMessage());
+            return false;
+        }
     }
 }

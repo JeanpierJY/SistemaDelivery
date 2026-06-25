@@ -12,7 +12,7 @@ import modelos.Pedido;
 public class EstadoEnProceso implements EstadoPedido {
     @Override
     public void siguienteEstado(Pedido pedido) {
-        pedido.setEstadoLogico(new EstadoEnCurso(), "EN CURSO");
+        pedido.setEstadoLogico(new EstadoEnCamino(), "EN CURSO");
     }
 
     @Override

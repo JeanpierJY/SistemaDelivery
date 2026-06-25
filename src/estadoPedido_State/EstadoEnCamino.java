@@ -8,7 +8,7 @@ import modelos.Pedido;
  *
  * @author Jean
  */
-public class EstadoEnCurso implements EstadoPedido {
+public class EstadoEnCamino implements EstadoPedido {
     @Override
     public void siguienteEstado(Pedido pedido) {
         pedido.setEstadoLogico(new EstadoCompletado(), "COMPLETADO");
@@ -16,6 +16,6 @@ public class EstadoEnCurso implements EstadoPedido {
 
     @Override
     public void mostrarEstado() {
-        System.out.println("El pedido está EN CURSO.");
+        System.out.println("El pedido está EN CAMINO.");
     }
 }

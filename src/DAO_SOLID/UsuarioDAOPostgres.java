@@ -44,6 +44,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     admin.setNombre(rs.getString("nombre"));
                     admin.setEmail(rs.getString("email"));
                     admin.setRol(rolBd);
+                    admin.setTelefono(rs.getString("telefono"));
                     usuarioAutenticado = admin;
                     
                 }else if(rolBd.equals("REPARTIDOR")){
@@ -53,6 +54,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     rappy.setNombre(rs.getString("nombre"));
                     rappy.setEmail(rs.getString("email"));
                     rappy.setRol(rolBd);
+                    rappy.setTelefono(rs.getString("telefono"));
                     rappy.setPlacaMoto(rs.getString("placa_moto"));
                     usuarioAutenticado = rappy;
                     
@@ -64,15 +66,18 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     cliente.setEmail(rs.getString("email"));
                     cliente.setRol(rolBd);
                     cliente.setDireccion(rs.getString("direccion"));
+                    cliente.setTelefono(rs.getString("telefono"));
                     cliente.setFechaCumpleaños(rs.getDate("fecha_cumpleanios")); 
+                    
                     usuarioAutenticado = cliente;
                 }else if(rolBd.equals("EMPLEADO")){
                     Empleado empleado = new Empleado();
                     empleado.setId(rs.getInt("id_usuario"));
                     empleado.setDni(rs.getString("dni"));
-                    empleado.setDni(rs.getString("nombre"));
+                    empleado.setNombre(rs.getString("nombre"));
                     empleado.setEmail(rs.getString("email"));
                     empleado.setRol(rolBd);
+                    empleado.setTelefono(rs.getString("telefono"));
                     usuarioAutenticado = empleado;
                 }
             }
@@ -86,7 +91,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
     public boolean registrarUsuario(Persona nuevoUsuario, String password) {
         boolean exito = false;
         Connection conexion = ConexionBD.getInstancia().getConexion();
-        String query = "INSERT INTO usuario (dni, nombre, email, password, direccion, rol, fecha_cumpleanios, placa_moto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO usuario (dni, nombre, email, password, telefono, direccion, rol, fecha_cumpleanios, placa_moto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try{
             PreparedStatement ps = conexion.prepareStatement(query);
@@ -95,6 +100,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
             ps.setString(2, nuevoUsuario.getNombre());
             ps.setString(3, nuevoUsuario.getEmail());
             ps.setString(4, password);
+            ps.setString(5, nuevoUsuario.getTelefono());
             
             String direccionParaBD = null;
             java.sql.Date fechaSqlParaBD = null; 
@@ -111,10 +117,10 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                 placaParaBD = r.getPlacaMoto();
             }
             
-            ps.setString(5, direccionParaBD);
-            ps.setString(6, nuevoUsuario.getRol());
-            ps.setDate(7, fechaSqlParaBD); 
-            ps.setString(8, placaParaBD);
+            ps.setString(6, direccionParaBD);
+            ps.setString(7, nuevoUsuario.getRol());
+            ps.setDate(8, fechaSqlParaBD); 
+            ps.setString(9, placaParaBD);
             
             int filasInsertadas = ps.executeUpdate();
             if(filasInsertadas > 0){
@@ -146,6 +152,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     admin.setNombre(rs.getString("nombre"));
                     admin.setEmail(rs.getString("email"));
                     admin.setRol(rolBd);
+                    admin.setTelefono(rs.getString("telefono"));
                     lista.add(admin);
                     
                 }else if(rolBd.equals("REPARTIDOR")){
@@ -156,6 +163,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     rappy.setEmail(rs.getString("email"));
                     rappy.setRol(rolBd);
                     rappy.setPlacaMoto(rs.getString("placa_moto"));
+                    rappy.setTelefono(rs.getString("telefono"));
                     lista.add(rappy);
                     
                 }else if(rolBd.equals("CLIENTE")){
@@ -167,6 +175,7 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                     cliente.setRol(rolBd);
                     cliente.setDireccion(rs.getString("direccion"));
                     cliente.setFechaCumpleaños(rs.getDate("fecha_cumpleanios"));
+                    cliente.setTelefono(rs.getString("telefono"));
                     lista.add(cliente);
                 }
             }
@@ -179,13 +188,14 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
     @Override
     public boolean actualizarUsuario(Persona usuario) {
         Connection conexion = ConexionBD.getInstancia().getConexion();
-        String query = "UPDATE usuario SET dni=?, nombre=?, email=?, direccion=?, placa_moto=?, fecha_cumpleanios=? WHERE id_usuario=?";
-        
+       String query = "UPDATE usuario SET dni=?, nombre=?, email=?, telefono=?, direccion=?, placa_moto=?, fecha_cumpleanios=? WHERE id_usuario=?";
+       
         try {
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setString(1, usuario.getDni());
             ps.setString(2, usuario.getNombre());
             ps.setString(3, usuario.getEmail());
+            ps.setString(4, usuario.getTelefono());
             
             String direccionParaBD = null;
             java.sql.Date fechaSqlParaBD = null; 
@@ -202,10 +212,10 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
                 placaParaBD = r.getPlacaMoto();
             }
             
-            ps.setString(4, direccionParaBD);
-            ps.setString(5, placaParaBD);
-            ps.setDate(6, fechaSqlParaBD);
-            ps.setInt(7, usuario.getId());
+            ps.setString(5, direccionParaBD);
+            ps.setString(6, placaParaBD);
+            ps.setDate(7, fechaSqlParaBD);
+            ps.setInt(8, usuario.getId());
             
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -217,14 +227,14 @@ public class UsuarioDAOPostgres implements IUsuarioDAO{
     @Override
     public boolean eliminarUsuario(int idUsuario) {
         Connection conexion = ConexionBD.getInstancia().getConexion();
-        String query = "DELETE FROM usuario WHERE id_usuario = ?";
+        String query = "DELETE usuario WHERE id_usuario = ?";
         
         try {
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setInt(1, idUsuario);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            LoggerSistema.getInstancia().error("Error al eliminar usuario (puede tener pedidos vinculados): " + e.getMessage());
+            LoggerSistema.getInstancia().error("Error al inhabilitar usuario: " + e.getMessage());
             return false;
         }
     }

@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import config_Singleton.ConexionBD;
 import config_Singleton.LoggerSistema;
+import estadoPedido_State.EstadoCancelado;
+import estadoPedido_State.EstadoCompletado;
+import estadoPedido_State.EstadoEnCamino;
+import estadoPedido_State.EstadoEnProceso;
 import modelos.Pedido;
 import modelos.DetallePedido;
 
@@ -96,6 +100,22 @@ public class PedidoDAOPostgres implements IPedidoDAO {
                 }
                 
                 p.setEstado(rs.getString("estado"));
+                String estadoDb = rs.getString("estado");
+                switch (estadoDb) {
+                    case "PENDIENTE":
+                        p.setEstadoLogico(new EstadoEnProceso());
+                        break;
+                    case "EN CURSO":
+                        p.setEstadoLogico(new EstadoEnCamino());
+                        break;
+                    case "COMPLETADO":
+                        p.setEstadoLogico(new EstadoCompletado());
+                        break;
+                    case "CANCELADO":
+                        p.setEstadoLogico(new EstadoCancelado());
+                        break;
+                }
+                
                 p.setCostoEnvio(rs.getDouble("costo_envio"));
                 p.setTotal(rs.getDouble("total"));
                 p.setFechaRegistro(rs.getTimestamp("fecha_registro"));

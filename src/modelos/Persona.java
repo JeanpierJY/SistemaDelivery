@@ -14,6 +14,7 @@ public abstract class Persona {
     private String nombre;
     private String email;
     private String rol;
+    private String telefono;
 
     public int getId() {
         return id;
@@ -54,6 +55,15 @@ public abstract class Persona {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    
 
     
 }
